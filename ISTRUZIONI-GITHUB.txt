@@ -1,0 +1,130 @@
+================================================================
+  EQUAZIONI DI SECONDO GRADO
+  Come caricare il sorgente su GitHub
+  (e come l'IA lo usa per clonare l'app con un grado diverso)
+================================================================
+
+PERCHE' USARE GITHUB?
+---------------------
+Se carichi il codice sorgente dell'app su un repository GitHub,
+un'IA (MARKY su Easy-Peasy.AI, GitHub Copilot, Claude, ChatGPT...)
+può clonare direttamente da lì per creare nuove app identiche con
+un grado diverso dell'equazione, oppure per adattare l'app alle
+disequazioni o alle equazioni/disequazioni fratte.
+
+In questo modo il "sorgente di riferimento" è sempre il tuo repo:
+ogni variante nasce dalla STESSA base, in modo riproducibile.
+La guida operativa completa per l'IA è nel file GUIDA-IA.md
+(incluso nel pacchetto): leggilo PRIMA di clonare.
+
+----------------------------------------------------------------
+PASSO 1 — CREA IL REPOSITORY SU GITHUB
+----------------------------------------------------------------
+1. Vai su https://github.com e accedi
+2. Clicca su "New repository" (pulsante + in alto a destra)
+3. Scegli un nome, es.:  equazioni-secondo-grado
+4. Impostalo PRIVATO o PUBBLICO (a tua scelta)
+5. NON aggiungere README, .gitignore o licenza (parti vuoto)
+6. Clicca "Create repository"
+
+----------------------------------------------------------------
+PASSO 2 — CARICA IL CODICE SORGENTE
+----------------------------------------------------------------
+Il codice da caricare è quello alla ROOT di questo pacchetto:
+client/ , server/ , shared/ , package.json , ecc.
+(NON caricare node_modules: è enorme e non serve).
+
+METODO A — GitHub Desktop (piu' semplice):
+  1. Apri GitHub Desktop → File → Clone repository
+  2. Seleziona il repository appena creato e clonalo in locale
+  3. Copia TUTTO il contenuto di questo pacchetto (client/,
+     server/, shared/, package.json, .gitignore, ...) dentro la
+     cartella clonata del repository (alla ROOT)
+  4. In GitHub Desktop: vedrai i file nuovi → scrivi un messaggio
+     (es. "Sorgente iniziale") → clicca "Commit to main"
+  5. Clicca "Push origin"
+
+METODO B — Riga di comando (git):
+  1. Copia il contenuto di questo pacchetto nella root del repo
+  2. Apri il terminale nella cartella del repo e digita:
+        git init
+        git add .
+        git commit -m "Sorgente iniziale"
+        git branch -M main
+        git remote add origin https://github.com/TUO-USER/TUO-REPO.git
+        git push -u origin main
+
+NOTA: il pacchetto contiene già un file  .gitignore  che
+esclude  node_modules ,  dist  e file temporanei. Lascialo cosi'.
+
+----------------------------------------------------------------
+PASSO 3 — COPIA L'URL DEL REPOSITORY
+----------------------------------------------------------------
+L'URL ha questa forma:
+   https://github.com/TUO-USER/TUO-REPO.git
+
+Lo trovi cliccando il pulsante verde "Code" nella pagina del repo
+e copiando l'indirizzo HTTPS.
+
+----------------------------------------------------------------
+PASSO 4 — CHIEDI ALL'IA LA NUOVA APP
+----------------------------------------------------------------
+Scrivi all'IA una frase del tipo:
+
+   "Fammi la stessa app ma di SESTO grado. Il sorgente e' su
+    GitHub: https://github.com/TUO-USER/TUO-REPO.git"
+
+L'IA eseguira' (script incluso nel pacchetto):
+
+   python3 scripts/clone_app.py \
+       --source https://github.com/TUO-USER/TUO-REPO.git \
+       --name equazioni-sesto-grado \
+       --degree 6
+
+   (varianti di TIPO con --kind, default equation):
+   --kind inequality              → disequazioni
+   --kind fractional              → equazioni fratte
+   --kind fractional-inequality   → disequazioni fratte
+   es.:  --name disequazioni-secondo-grado --degree 2 --kind inequality
+
+Lo script:
+  1. clona il repo (git clone) — oppure copia da una cartella locale
+  2. trova automaticamente la cartella dell'app (root o subfolder)
+  3. sostituisce grado e tipo (potenze, titoli, passi, testo)
+  4. stampa la CHECKLIST dei passi manuali da completare
+  5. l'IA completa, verifica (pnpm check), fa build, deploy e ZIP
+
+----------------------------------------------------------------
+GRADI DISPONIBILI
+----------------------------------------------------------------
+   --degree 2   → equazioni di SECONDO grado (quadratiche)  [attuale]
+   --degree 4   → equazioni di QUARTO grado (biquadratiche)
+   --degree 6   → equazioni di SESTO grado (bicubiche)
+   --degree 8   → equazioni di OTTAVO grado
+   ... (qualsiasi grado pari)
+
+Per le DISEQUAZIONI: chiedi all'IA "adatta l'app alle disequazioni"
+— guida in docs/disequazioni.md (e GUIDA-IA.md sezione 5).
+Per le EQUAZIONI/DISEQUAZIONI FRATTE: guida in docs/fratte.md
+(e GUIDA-IA.md sezione 6).
+
+----------------------------------------------------------------
+TRASFERIRE SU RENDER (via GitHub)
+----------------------------------------------------------------
+Lo stesso repository GitHub serve anche per pubblicare l'app su
+Render.com: leggi DEPLOY-RENDER.md (guida passo-passo) — il file
+render.yaml incluso crea il Web Service con un clic (New →
+Blueprint → collega il repo).
+
+----------------------------------------------------------------
+FILOSOFIA (BES)
+----------------------------------------------------------------
+Qualunque variante mantiene la stessa filosofia: accompagnare lo
+studente passo-passo, lasciandogli fare solo i conti finali piu'
+semplici. Ideale per studenti con BES/DSA. Le misure di
+accessibilità (font OpenDyslexic, barra, TTS, PDF...) sono
+ricapitate in ACCESSIBILITA.md e sono portabili su altre app.
+
+================================================================
+BUON LAVORO! 📐
+================================================================
